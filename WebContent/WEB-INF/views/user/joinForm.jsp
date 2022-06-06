@@ -1,5 +1,14 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
+<%@page import="com.javaex.vo.UserVo"%>
+<%@page import="com.javaex.dao.UserDao"%>
+<%@ page import = "java.util.List"  %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    
+<%
+    UserDao usersDao = new UserDao();
+	List<UserVo> userList = usersDao.userSelect();
+	UserVo authUser = (UserVo)session.getAttribute("authUser");
+%>    
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,24 +21,22 @@
 
 <body>
 	<div id="wrap">
-
 		<div id="header" class="clearfix">
 			<h1>
-				<a href="/mysite2/main">MySite</a>
+				<a href="./main">MySite</a>
 			</h1>
-
-			<!-- 
-			<ul>
-				<li>황일영 님 안녕하세요^^</li>
-				<li><a href="" class="btn_s">로그아웃</a></li>
-				<li><a href="" class="btn_s">회원정보수정</a></li>
-			</ul>
-			-->	
+			<%if(authUser == null){%>
 			<ul>
 				<li><a href="/mysite2/user?action=loginForm" class="btn_s">로그인</a></li>
 				<li><a href="/mysite2/user?action=joinForm" class="btn_s">회원가입</a></li>
 			</ul>
-			
+			<%} else {%>
+			<ul>
+				<li><%=authUser.getName() %> 님 안녕하세요^^</li>
+				<li><a href="/mysite2/user?action=logout" class="btn_s">로그아웃</a></li>
+				<li><a href="/mysite2/user?action=modifyForm" class="btn_s">회원정보수정</a></li>
+			</ul>
+			<%}%>
 		</div>
 		<!-- //header -->
 
@@ -38,7 +45,7 @@
 				<li><a href="">입사지원서</a></li>
 				<li><a href="">게시판</a></li>
 				<li><a href="">갤러리</a></li>
-				<li><a href="">방명록</a></li>
+				<li><a href="./gbc?action=addList">방명록</a></li>
 			</ul>
 		</div>
 		<!-- //nav -->
@@ -71,10 +78,8 @@
 	
 				<div id="user">
 					<div id="joinForm">
-						<form action="/mysite2/user" method="get">
-							<input type="text" name="action" value="join">
-	
-	
+						<form action="/mysite2/user" method="post">
+						<input type = "hidden" name = "action" value = "join">
 							<!-- 아이디 -->
 							<div class="form-group">
 								<label class="form-text" for="input-uid">아이디</label> 
@@ -85,7 +90,7 @@
 							<!-- 비밀번호 -->
 							<div class="form-group">
 								<label class="form-text" for="input-pass">패스워드</label> 
-								<input type="text" id="input-pass" name="password" value="" placeholder="비밀번호를 입력하세요"	>
+								<input type="password" id="input-pass" name="password" value="" placeholder="비밀번호를 입력하세요"	>
 							</div>
 	
 							<!-- 이메일 -->
@@ -130,7 +135,7 @@
 		<!-- //container  -->
 		
 		<div id="footer">
-			Copyright ⓒ 2020 황일영. All right reserved
+			Copyright ⓒ 2022 최정필. All right reserved
 		</div>
 		<!-- //footer -->
 
